@@ -189,7 +189,7 @@ button:focus-visible {
             
             .chat {
                 width: 100%;
-                max-width: 1280px;
+                /* max-width: 1280px; */
                 margin: 0 auto;
                 display: flex;
                 flex-direction: row;
@@ -264,7 +264,7 @@ button:focus-visible {
             
             form {
                 width: 100%;
-                max-width: 1280px;
+                /* max-width: 1280px; */
                 margin: 0 auto;
                 padding: 10px;
                 background: #fff;
