@@ -119,7 +119,8 @@ const handleSubmit = async(e) => {
         loader(messageDiv);
 
         // console.log(q2, "q2");
-        const response = await fetch("http://localhost:3000", {
+        // const response = await fetch("http://localhost:3000", {
+        const response = await fetch("https://buddi.onrender.com", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
