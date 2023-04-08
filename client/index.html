@@ -11,11 +11,32 @@
 
 <body>
     <div id="app">
-        <div id="chat_container"></div>
-        <form>
-            <textarea name="prompt" cols="1" rows="1" placeholder="Ask Buddi..."></textarea>
-            <button type="submit"><img src="assets/send.svg"/></button>
-        </form>
+        <div class="header">
+            <p class="logo">BUDDI</p>
+        </div>
+        <div class="app_container">
+            <div class="title"><span class="title_orange">Create</span> a new tutorial</div>
+            <div id="chat_container">
+                <div class="wrapper ai">
+                    <div class="chat">
+                        <div class="profile ">
+                            <!-- <img src="/assets/bot.svg" alt="bot" /> -->
+                            <span>BUDDI</span>
+                        </div>
+                        <div class="message" id="q1">Who is the tutorial for?</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form_container">
+                <div class="profile ">
+                    <span>YOU</span>
+                </div>
+                <form>
+                    <textarea name="prompt" cols="1" rows="1" placeholder="Ask Buddi..."></textarea>
+                    <button type="submit"><img src="assets/send.svg"/></button>
+                </form>
+            </div>
+        </div>
     </div>
     <script type="module" src="script.js"></script>
 </body>

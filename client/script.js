@@ -1,10 +1,13 @@
-import bot from "./assets/bot.svg";
-import user from "./assets/user.svg";
+// import bot from "./assets/bot.svg";
+// import user from "./assets/user.svg";
 
 const form = document.querySelector("form");
 const chatContainer = document.querySelector("#chat_container");
-
 let loadInterval;
+let step = 0;
+let q0 = "";
+let q1 = "";
+let q2 = "";
 
 function loader(element) {
     element.textContent = "";
@@ -49,14 +52,24 @@ function chatStripe(isAi, value, uniqueId) {
         <div class="wrapper ${isAi && "ai"}">
             <div class="chat">
                 <div class="profile">
-                    <img 
-                      src=${isAi ? bot : user} 
-                      alt="${isAi ? "bot" : "user"}" 
-                    />
+                    <span>${isAi ? "BUDDI" : "You"}</span>
                 </div>
                 <div class="message" id=${uniqueId}>${value}</div>
             </div>
         </div>
+    `;
+}
+
+function additionalQuestions(question_id, value) {
+    return `
+        <div class="wrapper ai">
+                <div class="chat">
+                    <div class="profile">
+                        <span>You</span>
+                    </div>
+                    <div class="message" id=${question_id}>${value}</div>
+                </div>
+            </div>
     `;
 }
 
@@ -71,42 +84,68 @@ const handleSubmit = async(e) => {
     // to clear the textarea input
     form.reset();
 
-    // bot's chatstripe
-    const uniqueId = generateUniqueId();
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+    if (step == 0) {
+        q0 = data.get("prompt");
+        step++;
 
-    // to focus scroll to the bottom
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+        clearInterval(loadInterval);
+        chatContainer.innerHTML += additionalQuestions(
+            "q1",
+            "What should the tutorial be about?"
+        );
+    } else if (step == 1) {
+        q1 = data.get("prompt");
+        step++;
 
-    // specific message div
-    const messageDiv = document.getElementById(uniqueId);
+        clearInterval(loadInterval);
+        chatContainer.innerHTML += additionalQuestions(
+            "q1",
+            "How long time should the user spend on the tutorial?"
+        );
+    } else if (step == 2) {
+        q2 = data.get("prompt");
 
-    // messageDiv.innerHTML = "..."
-    loader(messageDiv);
+        // bot's chatstripe
+        const uniqueId = generateUniqueId();
+        chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
 
-    const response = await fetch("https://buddi.onrender.com", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            prompt: data.get("prompt"),
-        }),
-    });
+        // to focus scroll to the bottom
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    clearInterval(loadInterval);
-    messageDiv.innerHTML = " ";
+        // specific message div
+        const messageDiv = document.getElementById(uniqueId);
 
-    if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+        // messageDiv.innerHTML = "..."
+        loader(messageDiv);
 
-        typeText(messageDiv, parsedData);
-    } else {
-        const err = await response.text();
+        // console.log(q2, "q2");
+        const response = await fetch("http://localhost:3000", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // prompt: data.get("prompt"),
+                q0: q0,
+                q1: q1,
+                q2: q2,
+            }),
+        });
 
-        messageDiv.innerHTML = "Something went wrong";
-        alert(err);
+        clearInterval(loadInterval);
+        messageDiv.innerHTML = " ";
+
+        if (response.ok) {
+            const data = await response.json();
+            const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+
+            typeText(messageDiv, parsedData);
+        } else {
+            const err = await response.text();
+
+            messageDiv.innerHTML = "Something went wrong";
+            alert(err);
+        }
     }
 };
 

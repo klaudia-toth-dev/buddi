@@ -23,7 +23,12 @@ app.get("/", async(req, res) => {
 
 app.post("/", async(req, res) => {
     try {
-        const prompt = req.body.prompt;
+        // const prompt = req.body.prompt;
+        const q0 = req.body.q0;
+        const q1 = req.body.q1;
+        const q2 = req.body.q2;
+
+        const prompt = `Create a step-by-step tutorial for ${q0} about ${q1} that the user can finish in ${q2}.`;
 
         const response = await openai.createCompletion({
             model: "text-davinci-003",
