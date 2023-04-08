@@ -65,7 +65,7 @@ function additionalQuestions(question_id, value) {
         <div class="wrapper ai">
                 <div class="chat">
                     <div class="profile">
-                        <span>You</span>
+                        <span>BUDDI</span>
                     </div>
                     <div class="message" id=${question_id}>${value}</div>
                 </div>
